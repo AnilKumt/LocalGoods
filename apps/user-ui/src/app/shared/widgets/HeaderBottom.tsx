@@ -10,17 +10,25 @@ const HeaderBottom = () => {
 
   // Categories specific to local goods and antiques
   const categories = [
-    { name: "Handicrafts", href: "/products?priceRange=0,1199&categories=Handicrafts&page=1" },
-    { name: "Vintage Furniture", href: "/products?priceRange=0,1199&categories=Vintage+Furniture&page=1" },
-    { name: "Artifacts", href: "/products?priceRange=0,1199&categories=Artifacts&page=1" },
-    { name: "Traditional Textiles", href: "/products?priceRange=0,1199&categories=Traditional+Textiles&page=1" },
-    { name: "Handmade Jewelry", href: "/products?priceRange=0,1199&categories=Handmade+Jewelry&page=1" },
-    { name: "Pottery and Ceramics", href: "/products?priceRange=0,1199&categories=Pottery+&+Ceramics&page=1" },
-    { name: "Folk Paintings", href: "/products?priceRange=0,1199&categories=Folk+Paintings&page=1" },
-    { name: "Collectibles", href: "/products?priceRange=0,1199&categories=Collectibles&page=1" },
-    { name: "Woodcrafts", href: "/products?priceRange=0,1199&categories=Woodcrafts&page=1" },
-    { name: "Metal Wroks", href: "/products?priceRange=0,1199&categories=Metal+Works&page=1" },
+    "Handicrafts",
+    "Vintage Furniture",
+    "Artifacts",
+    "Traditional Textiles",
+    "Handmade Jewelry",
+    "Pottery and Ceramics",
+    "Folk Paintings",
+    "Collectibles",
+    "Woodcrafts",
+    "Metal Works",
   ];
+
+  const buildCategoryHref = (name: string) => {
+    const params = new URLSearchParams();
+    params.set("priceRange", "0,1199");
+    params.set("categories", encodeURIComponent(name));
+    params.set("page", "1");
+    return `/products?${params.toString()}`;
+  };
 
   return (
     <nav className="bg-gray-50 border-b border-gray-200">
@@ -44,14 +52,14 @@ const HeaderBottom = () => {
             {/* Dropdown Menu */}
             {showCategories && (
               <div className="absolute left-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-                {categories.map((category, index) => (
+                {categories.map((name, index) => (
                   <Link
                     key={index}
-                    href={category.href}
+                    href={buildCategoryHref(name)}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors"
                     onClick={() => setShowCategories(false)}
                   >
-                    {category.name}
+                    {name}
                   </Link>
                 ))}
               </div>

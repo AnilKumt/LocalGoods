@@ -2,8 +2,8 @@
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "apps/user-ui/src/utils/axiosInstance";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import React, { useEffect, useMemo, useState } from "react";
 import { Range } from "react-range";
 import ProductCard from "../../shared/components/cards/product-card";
 
@@ -13,6 +13,7 @@ const MAX = 1199;
 
 const page = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [isProductLoading, setIsProductLoading] = useState(false);
   const [priceRange, setPriceRange] = useState([0, 1199]);
@@ -23,6 +24,7 @@ const page = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [totalPages, setTotalPages] = useState(1);
   const [tempPriceRange, setTempPriceRange] = useState([0, 1199]);
+  const [initialized, setInitialized] = useState(false);
   const colors = [
     { name: "Black", code: "#000" },
     { name: "Red", code: "#ff0000" },
@@ -48,7 +50,7 @@ const page = () => {
       params.set("sizes", selectedSizes.join(","));
     }
     params.set("page", page.toString());
-    router.replace(`/products?${decodeURIComponent(params.toString())}`);
+    router.replace(`/products?${params.toString()}`);
   };
 
   const fetchFilteredProducts = async () => {
@@ -83,10 +85,37 @@ const page = () => {
 
 
 
+  // Initialize state from URL on first render
   useEffect(() => {
+    if (initialized) return;
+    const urlPriceRange = searchParams.get("priceRange");
+    const urlCategories = searchParams.get("categories");
+    const urlColors = searchParams.get("colors");
+    const urlSizes = searchParams.get("sizes");
+    const urlPage = searchParams.get("page");
+
+    if (urlPriceRange) {
+      const parts = urlPriceRange.split(",").map((n) => Number(n));
+      if (parts.length === 2 && parts.every((v) => !Number.isNaN(v))) {
+        setPriceRange([parts[0], parts[1]] as any);
+        setTempPriceRange([parts[0], parts[1]] as any);
+      }
+    }
+    if (urlCategories) setSelectedCategories(urlCategories.split(",").map(decodeURIComponent));
+    if (urlColors) setSelectedColors(urlColors.split(",").map(decodeURIComponent));
+    if (urlSizes) setSelectedSizes(urlSizes.split(",").map(decodeURIComponent));
+    if (urlPage) setPage(Number(urlPage) || 1);
+
+    setInitialized(true);
+  }, [initialized, searchParams]);
+
+  // Sync URL and fetch data when filters change after initialization
+  useEffect(() => {
+    if (!initialized) return;
     updateURL();
     fetchFilteredProducts();
-  }, [priceRange, selectedCategories, selectedColors, selectedSizes, page]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialized, priceRange, selectedCategories, selectedColors, selectedSizes, page]);
 
   const { data, isLoading } = useQuery({
     queryKey: ["categories"],
@@ -110,8 +139,8 @@ const page = () => {
     );
   };
   const toogleSize = (size: string) => {
-    setSelectedCategories((prev) =>
-      prev.includes(size) ? prev.filter((cat) => cat !== size) : [...prev, size]
+    setSelectedSizes((prev) =>
+      prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]
     );
   };
   return (
@@ -245,8 +274,8 @@ const page = () => {
                   <label className="flex items-center gap-3 text-sm text-gray-700 cursor-pointer">
                     <input
                       type="checkbox"
-                      checked={selectedColors.includes(size)}
-                      onChange={() => toogleColor(size)}
+                      checked={selectedSizes.includes(size)}
+                      onChange={() => toogleSize(size)}
                       className="accent-blue-600"
                     />
                     <span className="font-medium">{size}</span>
