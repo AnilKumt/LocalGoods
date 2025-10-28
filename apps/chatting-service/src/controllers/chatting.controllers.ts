@@ -174,7 +174,7 @@ export const getSellerConversations = async (
         const userParticipant = await prisma.participant.findFirst({
           where: {
             conversationId: group.id,
-            sellerId: { not: null },
+            userId: { not: null },
           },
         });
 

@@ -17,7 +17,7 @@ import {
 } from "../utils/auth.helper";
 import { setCookie } from "../utils/cookies/setCookies";
 import Stripe from "stripe";
-// import {sendLog} from "../../../../packages/utils/logs/send-logs"
+import {sendLog} from "../../../../packages/utils/logs/send-logs"
 
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -193,11 +193,11 @@ export const refreshToken = async (
 export const getUser = async (req: any, res: Response, next: NextFunction) => {
   try {
     const user = req.user;
-    // await sendLog({
-    //   type:"success",
-    //   message:`USer data retrieved ${user?.email}`,
-    //   source:"auth-service"
-    // })
+    await sendLog({
+      type:"success",
+      message:`USer data retrieved ${user?.email}`,
+      source:"auth-service"
+    })
     res.status(201).json({
       success: true,
       user,

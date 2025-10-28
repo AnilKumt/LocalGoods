@@ -10,6 +10,7 @@ import ProductCard from "../../shared/components/cards/product-card";
 const MIN = 0;
 const MAX = 1199;
 
+
 const page = () => {
   const router = useRouter();
 
@@ -79,6 +80,8 @@ const page = () => {
       setIsProductLoading(false);
     }
   };
+
+
 
   useEffect(() => {
     updateURL();

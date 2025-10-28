@@ -254,7 +254,6 @@ const ChatPage = () => {
     if (
       !message.trim() ||
       !selectedChat ||
-      !ws ||
       ws.readyState !== WebSocket.OPEN
     ) {
       console.log("❌ Send blocked - missing requirements");

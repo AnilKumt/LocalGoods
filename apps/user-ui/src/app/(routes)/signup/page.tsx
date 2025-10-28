@@ -51,7 +51,7 @@ const Signup = () => {
 
   const signupMutation = useMutation({
     mutationFn: async (data: FormData) => {
-      const response = await axiosInstance.post(`/auth/api/user-registration`, data);
+      const response = await axiosInstance.post(`/api/user-registration`, data);
       return response.data;
     },
     onSuccess: (_, formData) => {
@@ -71,7 +71,7 @@ const Signup = () => {
   const verifyOtpMutation = useMutation({
     mutationFn: async () => {
       if (!userData) return;
-      const response = await axiosInstance.post(`/auth/api/verify-user`, {
+      const response = await axiosInstance.post(`/api/verify-user`, {
         ...userData,
         otp: otp.join("")
       });

@@ -40,7 +40,7 @@ const Header = () => {
           <div className="flex-shrink-0">
             <Link href="/" className="flex items-center">
               <Image
-                src={layout?.logo || "https://drive.google.com/file/d/13XDWM1-6EUHPjhyq7KaURBT6mZ376UB6/view?usp=sharing"}
+                src={layout?.logo || "https://res.cloudinary.com/dwzjncfin/image/upload/v1759744440/github_banner_2_gzkoq4.png"}
                 width={200}
                 height={60}
                 alt="LocalGoods Logo"

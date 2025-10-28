@@ -23,8 +23,9 @@ export const WebSocketProvider = ({
         wsRef.current = ws;
 
         ws.onopen=()=>{
+            console.log("WebSocket connected");
             ws.send(`seller_${seller.id}`);
-            setWsReady(true)
+            setWsReady(true);
         };
 
         ws.onmessage=(event)=>{
@@ -39,6 +40,7 @@ export const WebSocketProvider = ({
 
         return ()=>{
             ws.close();
+            console.log("WebSocket disconnected");
         }
     },[seller?.id])
 
