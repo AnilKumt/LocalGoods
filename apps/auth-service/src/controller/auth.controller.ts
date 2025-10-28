@@ -748,3 +748,28 @@ export const getLayoutData = async (
     next(error);    
   }
 }
+
+export const logoutUser = async (
+  req:Request,
+  res:Response,
+  next:NextFunction
+)=>{
+  try {
+    // Clear all cookies
+    res.clearCookie("access_token");
+    res.clearCookie("refresh_token");
+    res.clearCookie("seller_access_token");
+    res.clearCookie("seller_refresh_token");
+    res.clearCookie("seller-access-token");
+    res.clearCookie("seller-refresh-token");
+    res.clearCookie("admin-access-token");
+    res.clearCookie("admin-refresh-token");
+
+    res.status(200).json({
+      success:true,
+      message:"Logged out successfully",
+    });
+  } catch (error) {
+    next(error);    
+  }
+}
