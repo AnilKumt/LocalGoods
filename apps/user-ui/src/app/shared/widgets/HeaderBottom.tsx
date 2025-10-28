@@ -10,16 +10,16 @@ const HeaderBottom = () => {
 
   // Categories specific to local goods and antiques
   const categories = [
-    { name: "Antiques & Collectibles", href: "/category/antiques" },
-    { name: "Handmade Crafts", href: "/category/handmade" },
-    { name: "Vintage Items", href: "/category/vintage" },
-    { name: "Art & Paintings", href: "/category/art" },
-    { name: "Jewelry & Accessories", href: "/category/jewelry" },
-    { name: "Home & Garden", href: "/category/home" },
-    { name: "Books & Media", href: "/category/books" },
-    { name: "Furniture", href: "/category/furniture" },
-    { name: "Textiles & Fabrics", href: "/category/textiles" },
-    { name: "Tools & Equipment", href: "/category/tools" },
+    { name: "Handicrafts", href: "/products?priceRange=0,1199&categories=Handicrafts&page=1" },
+    { name: "Vintage Furniture", href: "/products?priceRange=0,1199&categories=Vintage+Furniture&page=1" },
+    { name: "Artifacts", href: "/products?priceRange=0,1199&categories=Artifacts&page=1" },
+    { name: "Traditional Textiles", href: "/products?priceRange=0,1199&categories=Traditional+Textiles&page=1" },
+    { name: "Handmade Jewelry", href: "/products?priceRange=0,1199&categories=Handmade+Jewelry&page=1" },
+    { name: "Pottery and Ceramics", href: "/products?priceRange=0,1199&categories=Pottery+&+Ceramics&page=1" },
+    { name: "Folk Paintings", href: "/products?priceRange=0,1199&categories=Folk+Paintings&page=1" },
+    { name: "Collectibles", href: "/products?priceRange=0,1199&categories=Collectibles&page=1" },
+    { name: "Woodcrafts", href: "/products?priceRange=0,1199&categories=Woodcrafts&page=1" },
+    { name: "Metal Wroks", href: "/products?priceRange=0,1199&categories=Metal+Works&page=1" },
   ];
 
   return (
