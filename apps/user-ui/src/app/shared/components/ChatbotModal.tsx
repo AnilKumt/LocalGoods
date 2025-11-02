@@ -37,57 +37,26 @@ const ChatbotModal = () => {
     setIsLoading(true);
 
     try {
-      // Check if the message contains price-related queries
-      const priceMatch = userMessage.match(/less than (\d+)/i) || 
-                        userMessage.match(/under (\d+)/i) ||
-                        userMessage.match(/below (\d+)/i) ||
-                        userMessage.match(/products? under (\d+)/i) ||
-                        userMessage.match(/products? less than (\d+)/i) ||
-                        userMessage.match(/products? below (\d+)/i);
-
-      if (priceMatch) {
-        const price = priceMatch[1];
-        // Redirect to products page with price filter
-        window.location.href = `/products?maxPrice=${price}`;
-        addMessage(`Searching for products under ₹${price}...`, true);
-        setIsLoading(false);
-        setIsOpen(false);
-        return;
-      }
-
-      // Check for category queries
-      if (userMessage.toLowerCase().includes('search') || userMessage.toLowerCase().includes('find')) {
-        // For now, provide a helpful response
-        const response = "I can help you search for products! Try asking me questions like:\n• \"Products less than 500\"\n• \"Find products under 1000\"\n• \"Show me products below 1500\"\n\nOr feel free to browse our products page for more options!";
-        setTimeout(() => {
-          addMessage(response, true);
-          setIsLoading(false);
-        }, 500);
-        return;
-      }
-
-      // Send message to chatbot API
+      // Send message to chatbot API (n8n-service)
       const response = await axiosInstance.post('/chatbot/api/chat', {
         message: userMessage,
       });
 
+      // Get response from n8n webhook
       const botResponse = response.data?.response || response.data?.message || 
                          "I'm here to help! Try asking me about products, prices, or categories.";
 
-      setTimeout(() => {
-        addMessage(botResponse, true);
-        setIsLoading(false);
-      }, 500);
+      addMessage(botResponse, true);
+      setIsLoading(false);
 
     } catch (error: any) {
       console.error('Chatbot error:', error);
       const errorMessage = error?.response?.data?.error || 
+                          error?.response?.data?.message ||
                           "Sorry, I'm having trouble connecting right now. Please try again later or browse our products directly!";
       
-      setTimeout(() => {
-        addMessage(errorMessage, true);
-        setIsLoading(false);
-      }, 500);
+      addMessage(errorMessage, true);
+      setIsLoading(false);
     }
   };
 

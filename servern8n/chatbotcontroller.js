@@ -2,7 +2,7 @@
 import fetch from "node-fetch";
 
 export async function getChatbotResponse(message) {
-  const url = "https://prakharbhar.app.n8n.cloud/webhook-test/2b1031d0-6f5d-4f65-b4f1-d08c212b731f";
+  const url = "https://alzeenia.app.n8n.cloud/webhook/2b1031d0-6f5d-4f65-b4f1-d08c212b731f";
 
   try {
     const response = await fetch(url, {

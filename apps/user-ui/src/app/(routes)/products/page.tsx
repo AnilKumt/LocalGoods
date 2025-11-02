@@ -3,12 +3,12 @@ import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "apps/user-ui/src/utils/axiosInstance";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Range } from "react-range";
 import ProductCard from "../../shared/components/cards/product-card";
 
 const MIN = 0;
-const MAX = 1199;
+const MAX = 100000;
 
 
 const page = () => {
@@ -16,14 +16,14 @@ const page = () => {
   const searchParams = useSearchParams();
 
   const [isProductLoading, setIsProductLoading] = useState(false);
-  const [priceRange, setPriceRange] = useState([0, 1199]);
+  const [priceRange, setPriceRange] = useState([0, MAX]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
   const [page, setPage] = useState(1);
   const [products, setProducts] = useState<any[]>([]);
   const [totalPages, setTotalPages] = useState(1);
-  const [tempPriceRange, setTempPriceRange] = useState([0, 1199]);
+  const [tempPriceRange, setTempPriceRange] = useState([0, MAX]);
   const [initialized, setInitialized] = useState(false);
   const colors = [
     { name: "Black", code: "#000" },
@@ -97,9 +97,18 @@ const page = () => {
     if (urlPriceRange) {
       const parts = urlPriceRange.split(",").map((n) => Number(n));
       if (parts.length === 2 && parts.every((v) => !Number.isNaN(v))) {
-        setPriceRange([parts[0], parts[1]] as any);
-        setTempPriceRange([parts[0], parts[1]] as any);
+        // Clamp values to valid range
+        const clampedParts = [
+          Math.max(MIN, Math.min(parts[0], MAX)),
+          Math.max(MIN, Math.min(parts[1], MAX))
+        ];
+        setPriceRange(clampedParts as any);
+        setTempPriceRange(clampedParts as any);
       }
+    } else {
+      // Initialize with MAX if no URL parameter
+      setPriceRange([0, MAX]);
+      setTempPriceRange([0, MAX]);
     }
     if (urlCategories) setSelectedCategories(urlCategories.split(",").map(decodeURIComponent));
     if (urlColors) setSelectedColors(urlColors.split(",").map(decodeURIComponent));

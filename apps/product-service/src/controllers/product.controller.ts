@@ -372,14 +372,50 @@ export const getAllProducts = async (
     const skip = (page - 1) * limit;
     const type = req.query.type;
 
-    const baseFilter = {
-      OR: [
+    // First, get all valid (non-deleted) shop IDs
+    const validShops = await prisma.shops.findMany({
+      where: {
+        isDeleted: false,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    const validShopIds = validShops.map((shop) => shop.id);
+
+    // If no valid shops, return empty result
+    if (validShopIds.length === 0) {
+      return res.status(200).json({
+        products: [],
+        top10By: type === "latest" ? "latest" : "topSales",
+        top10Products: [],
+        total: 0,
+        currentPage: page,
+        totalPages: 0,
+      });
+    }
+
+    const baseFilter: any = {
+      AND: [
         {
-          starting_date: null,
+          OR: [
+            {
+              starting_date: null,
+            },
+            {
+              ending_date: null,
+            }
+          ],
         },
         {
-          ending_date: null,
-        }
+          isDeleted: { not: true },
+        },
+        {
+          shopId: {
+            in: validShopIds,
+          },
+        },
       ],
     };
 
@@ -406,6 +442,10 @@ export const getAllProducts = async (
       prisma.products.findMany({
         take: 10,
         where: baseFilter,
+        include: {
+          images: true,
+          Shop: true,
+        },
         orderBy,
       }),
     ]);
@@ -472,32 +512,64 @@ export const getFilteredProducts = async (
 
     const skip = (parsedPage - 1) * parsedLimit;
 
-    const filters: Record<string, any> = {
-      sale_price: {
-        gte: parsedPriceRange[0],
-        lte: parsedPriceRange[1],
+    // First, get all valid (non-deleted) shop IDs
+    const validShops = await prisma.shops.findMany({
+      where: {
+        isDeleted: false,
       },
-      starting_date: null,
+      select: {
+        id: true,
+      },
+    });
+
+    const validShopIds = validShops.map((shop) => shop.id);
+
+    const filters: Record<string, any> = {
+      AND: [
+        {
+          sale_price: {
+            gte: parsedPriceRange[0],
+            lte: parsedPriceRange[1],
+          },
+        },
+        {
+          starting_date: null,
+        },
+        {
+          isDeleted: { not: true },
+        },
+        {
+          shopId: {
+            in: validShopIds,
+          },
+        },
+      ],
     };
 
     if (categories && (categories as string[]).length > 0) {
-      filters.category = {
-        in: Array.isArray(categories)
-          ? categories
-          : String(categories).split(","),
-      };
+      filters.AND.push({
+        category: {
+          in: Array.isArray(categories)
+            ? categories
+            : String(categories).split(","),
+        },
+      });
     }
 
     if (colors && (colors as string[]).length > 0) {
-      filters.colors = {
-        hasSome: Array.isArray(colors) ? colors : [colors],
-      };
+      filters.AND.push({
+        colors: {
+          hasSome: Array.isArray(colors) ? colors : [colors],
+        },
+      });
     }
 
     if (sizes && (sizes as string[]).length > 0) {
-      filters.sizes = {
-        hasSome: Array.isArray(sizes) ? sizes : [sizes],
-      };
+      filters.AND.push({
+        sizes: {
+          hasSome: Array.isArray(sizes) ? sizes : [sizes],
+        },
+      });
     }
 
     const [products, total] = await Promise.all([
@@ -553,34 +625,66 @@ export const getFilteredEvents = async (
 
     const skip = (parsedPage - 1) * parsedLimit;
 
+    // First, get all valid (non-deleted) shop IDs
+    const validShops = await prisma.shops.findMany({
+      where: {
+        isDeleted: false,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    const validShopIds = validShops.map((shop) => shop.id);
+
     const filters: Record<string, any> = {
-      sale_price: {
-        gte: parsedPriceRange[0],
-        lte: parsedPriceRange[1],
-      },
-      NOT: {
-        starting_date: null,
-      },
+      AND: [
+        {
+          sale_price: {
+            gte: parsedPriceRange[0],
+            lte: parsedPriceRange[1],
+          },
+        },
+        {
+          NOT: {
+            starting_date: null,
+          },
+        },
+        {
+          isDeleted: { not: true },
+        },
+        {
+          shopId: {
+            in: validShopIds,
+          },
+        },
+      ],
     };
 
     if (categories && (categories as string[]).length > 0) {
-      filters.category = {
-        in: Array.isArray(categories)
-          ? categories
-          : String(categories).split(","),
-      };
+      filters.AND.push({
+        category: {
+          in: Array.isArray(categories)
+            ? categories
+            : String(categories).split(","),
+        },
+      });
     }
 
     if (colors && (colors as string[]).length > 0) {
-      filters.colors = {
-        hasSome: Array.isArray(colors) ? colors : [colors],
-      };
+      filters.AND.push({
+        colors: {
+          hasSome: Array.isArray(colors) ? colors : [colors],
+        },
+      });
     }
 
     if (sizes && (sizes as string[]).length > 0) {
-      filters.sizes = {
-        hasSome: Array.isArray(sizes) ? sizes : [sizes],
-      };
+      filters.AND.push({
+        sizes: {
+          hasSome: Array.isArray(sizes) ? sizes : [sizes],
+        },
+      });
     }
 
     const [products, total] = await Promise.all([
@@ -799,13 +903,44 @@ export const getAllEvents = async (
     const skip = (page - 1) * limit;
     const type = req.query.type;
 
-    const baseFilter = {
+    // First, get all valid (non-deleted) shop IDs
+    const validShops = await prisma.shops.findMany({
+      where: {
+        isDeleted: false,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    const validShopIds = validShops.map((shop) => shop.id);
+
+    // If no valid shops, return empty result
+    if (validShopIds.length === 0) {
+      return res.status(200).json({
+        events: [],
+        top10BySales: [],
+        total: 0,
+        currentPage: page,
+        totalPages: 0,
+      });
+    }
+
+    const baseFilter: any = {
       AND: [
         {
           starting_date: { not: null },
         },
         {
           ending_date: { not: null },
+        },
+        {
+          isDeleted: { not: true },
+        },
+        {
+          shopId: {
+            in: validShopIds,
+          },
         },
       ],
     };
@@ -827,6 +962,10 @@ export const getAllEvents = async (
       prisma.products.findMany({
         take: 10,
         where: baseFilter,
+        include: {
+          images: true,
+          Shop: true,
+        },
         orderBy: {
           totalSales: "desc",
         },

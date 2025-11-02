@@ -51,6 +51,9 @@
     },
     {
       "path": "./apps/seller-service"
+    },
+    {
+      "path": "./apps/n8n-service"
     }
   ]
 }

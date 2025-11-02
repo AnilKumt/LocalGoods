@@ -9,6 +9,7 @@ import { ChatbotProvider } from '../context/ChatbotContext';
 import ChatbotButton from './shared/components/ChatbotButton';
 import ChatbotModal from './shared/components/ChatbotModal';
 import PreLoader from './shared/components/PreLoader';
+import NavigationProgress from './shared/components/NavigationProgress';
 
 
 
@@ -40,6 +41,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={`${roboto.variable} ${poppins.variable}`}>
         <PreLoader />
+        <NavigationProgress />
         {/* <WebSocketProvider user={user}> */}
         <Providers>
         <ChatbotProvider>

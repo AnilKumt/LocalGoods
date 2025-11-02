@@ -1,0 +1,21 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "types": [
+      "node",
+      "express"
+    ],
+    "rootDir": "../../",
+    "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo"
+  },
+  "include": [
+    "src/**/*.ts",
+    "../../packages/**/.ts",
+    "../../packages/error-handler/**/*.ts",
+    "../../packages/libs/**/**/*.ts",
+    "../../packages/middleware/**/*.ts",
+    "../../packages/utils/**/*.ts"
+  ],
+  "exclude": []
+}

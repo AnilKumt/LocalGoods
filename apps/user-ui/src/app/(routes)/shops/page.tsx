@@ -1,5 +1,4 @@
 "use client";
-import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "apps/user-ui/src/utils/axiosInstance";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -41,6 +40,9 @@ const page = () => {
       if (selectedCategories.length > 0) {
         query.set("categories", selectedCategories.join(","));
       }
+      if (selectedCountries.length > 0) {
+        query.set("countries", selectedCountries.join(","));
+      }
       query.set("page", page.toString());
       query.set("limit", "12");
 
@@ -60,7 +62,7 @@ const page = () => {
   useEffect(() => {
     updateURL();
     fetchFilteredShops();
-  }, [selectedCategories, page]);
+  }, [selectedCategories, selectedCountries, page]);
 
 
   const toogleCategories = (label: string) => {
@@ -109,7 +111,7 @@ const page = () => {
                       <input
                         type="checkbox"
                         checked={selectedCategories.includes(category.value)}
-                        onChange={() => toogleCategories(category)}
+                        onChange={() => toogleCategories(category.value)}
                         className="accent-blue-600"
                       />
                       {category.value}

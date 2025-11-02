@@ -27,7 +27,7 @@ const Hero = () => {
             {/* Badge */}
             <div className="inline-flex items-center gap-2 bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-medium">
               <Star className="w-4 h-4 fill-current" />
-              <span>Trusted by 10,000+ customers</span>
+              <span>Trusted by customers</span>
             </div>
 
             {/* Main Heading */}
@@ -90,7 +90,7 @@ const Hero = () => {
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-8 pt-8 border-t border-gray-200">
+            {/* <div className="grid grid-cols-3 gap-8 pt-8 border-t border-gray-200">
               <div className="text-center">
                 <p className="text-2xl font-bold text-gray-900">500+</p>
                 <p className="text-sm text-gray-600">Local Sellers</p>
@@ -103,7 +103,7 @@ const Hero = () => {
                 <p className="text-2xl font-bold text-gray-900">50K+</p>
                 <p className="text-sm text-gray-600">Happy Customers</p>
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* Right Content - Enhanced Image Gallery */}
@@ -113,7 +113,7 @@ const Hero = () => {
               <div className="col-span-2 row-span-2 relative">
                 <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl">
                   <Image
-                    src={layout?.banner || "https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"}
+                    src={layout?.banner || "https://res.cloudinary.com/duqrxy27h/image/upload/v1762094692/4_zw9pct.png"}
                     alt="Indian antiques and handmade goods"
                     width={600}
                     height={450}
@@ -137,7 +137,7 @@ const Hero = () => {
               {/* Indian Pottery & Ceramics */}
               <div className="aspect-square rounded-xl overflow-hidden shadow-lg">
                 <Image
-                  src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+                  src="https://res.cloudinary.com/duqrxy27h/image/upload/v1762094692/2_hdvthx.png"
                   alt="Indian pottery and ceramics"
                   width={300}
                   height={300}
@@ -148,7 +148,7 @@ const Hero = () => {
               {/* Traditional Indian Jewelry */}
               <div className="aspect-square rounded-xl overflow-hidden shadow-lg">
                 <Image
-                  src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+                  src="https://res.cloudinary.com/duqrxy27h/image/upload/v1762094692/3_xqtcc9.png"
                   alt="Traditional Indian jewelry"
                   width={300}
                   height={300}
@@ -159,7 +159,7 @@ const Hero = () => {
               {/* Vintage Indian Textiles */}
               <div className="aspect-square rounded-xl overflow-hidden shadow-lg">
                 <Image
-                  src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+                  src="https://res.cloudinary.com/duqrxy27h/image/upload/v1762094692/1_dja2mu.png"
                   alt="Vintage Indian textiles"
                   width={300}
                   height={300}
@@ -170,7 +170,7 @@ const Hero = () => {
               {/* Indian Handicrafts */}
               <div className="aspect-square rounded-xl overflow-hidden shadow-lg">
                 <Image
-                  src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+                  src="https://res.cloudinary.com/duqrxy27h/image/upload/v1762094692/5_m84iew.png"
                   alt="Indian handicrafts"
                   width={300}
                   height={300}
@@ -181,7 +181,7 @@ const Hero = () => {
               {/* Indian Art & Paintings */}
               <div className="aspect-square rounded-xl overflow-hidden shadow-lg">
                 <Image
-                  src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+                  src="https://res.cloudinary.com/duqrxy27h/image/upload/v1762095163/6_sbonjl.png"
                   alt="Indian art and paintings"
                   width={300}
                   height={300}
