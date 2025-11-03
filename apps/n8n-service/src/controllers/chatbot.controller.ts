@@ -16,14 +16,15 @@ export async function getChatbotResponse(message: string) {
 
     console.log("Response status:", response.status, response.statusText);
 
-    
+    // Get response as text (n8n returns text, not JSON)
     const responseText = await response.text();
     console.log("Response text:", responseText);
 
-    
+    // If status is not ok, handle error
     if (!response.ok) {
-     
       let errorMessage = "Sorry, I'm having trouble processing your request. Please try again later!";
+      
+      // Try to extract error message if it's JSON (for error responses)
       try {
         const errorData = JSON.parse(responseText);
         if (errorData.message) {
@@ -33,7 +34,11 @@ export async function getChatbotResponse(message: string) {
           console.warn(`[n8n webhook] Received error status ${response.status}:`, responseText.substring(0, 200));
         }
       } catch {
+        // If not JSON, use the text as error message
         console.warn(`[n8n webhook] Received error status ${response.status}:`, responseText.substring(0, 200));
+        if (responseText) {
+          errorMessage = responseText.substring(0, 500); // Limit error message length
+        }
       }
       
       return {
@@ -42,19 +47,10 @@ export async function getChatbotResponse(message: string) {
       };
     }
 
-   
-    let data;
-    try {
-      data = JSON.parse(responseText);
-    } catch (parseError) {
-     
-      console.log("Response is not JSON, using as plain text");
-      return {
-        response: responseText || "I received your message, but couldn't process the response properly."
-      };
-    }
-
-    return data;
+    // n8n returns plain text, so return it directly
+    return {
+      response: responseText.trim() || "I received your message, but couldn't process the response properly."
+    };
   } catch (error: any) {
     
     if (error.message && !error.message.includes('HTTP error')) {
@@ -80,9 +76,8 @@ export async function chatWithBot(req: Request, res: Response, next: NextFunctio
 
     const chatbotResponse = await getChatbotResponse(message.trim());
     
-   
+    // Handle error responses from n8n or fetch errors
     if (chatbotResponse.error) {
-    
       return res.status(200).json({
         response: chatbotResponse.response || chatbotResponse.error,
         message: chatbotResponse.response || chatbotResponse.error,
@@ -90,38 +85,9 @@ export async function chatWithBot(req: Request, res: Response, next: NextFunctio
       });
     }
 
-    // Handle different response formats from n8n webhook
-    // n8n can return responses in various formats:
-    // - { response: "..." }
-    // - { message: "..." }
-    // - { text: "..." }
-    // - Array format
-    // - Direct string
-    let responseText: string;
-
-    if (typeof chatbotResponse === 'string') {
-      responseText = chatbotResponse;
-    } else if (Array.isArray(chatbotResponse) && chatbotResponse.length > 0) {
-      // If array, take first item
-      const firstItem = chatbotResponse[0];
-      responseText = typeof firstItem === 'string' 
-        ? firstItem 
-        : firstItem?.response || firstItem?.message || firstItem?.text || JSON.stringify(firstItem);
-    } else if (chatbotResponse && typeof chatbotResponse === 'object') {
-     
-      responseText = chatbotResponse.response || 
-                    chatbotResponse.message || 
-                    chatbotResponse.text ||
-                    chatbotResponse.data ||
-                    chatbotResponse.output ||
-                    (chatbotResponse.body && (typeof chatbotResponse.body === 'string' ? chatbotResponse.body : JSON.stringify(chatbotResponse.body))) ||
-                    JSON.stringify(chatbotResponse);
-    } else {
-      responseText = "I received your message, but couldn't process the response.";
-    }
-
-    
-    responseText = responseText.trim();
+    // n8n returns plain text, extract the response string
+    const responseText = chatbotResponse.response?.trim() || 
+                        "I received your message, but couldn't process the response.";
 
     return res.status(200).json({
       response: responseText,
