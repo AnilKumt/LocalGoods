@@ -8,10 +8,12 @@ export async function getChatbotResponse(message: string) {
     console.log("Calling n8n webhook:", url);
     console.log("Sending message:", message);
     
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message })
+    // Add message as query parameter
+    const urlWithParams = new URL(url);
+    urlWithParams.searchParams.set("message", message);
+    
+    const response = await fetch(urlWithParams.toString(), {
+      method: "POST"
     });
 
     console.log("Response status:", response.status, response.statusText);
